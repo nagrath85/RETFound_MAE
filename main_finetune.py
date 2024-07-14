@@ -38,7 +38,7 @@ from engine_finetune import train_one_epoch, evaluate
 
 # Set up logging configuration
 logging.basicConfig(
-    filename='my_log_file.log',
+    filename='SN_code_tracker.log',
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s'
 )
