@@ -30,11 +30,27 @@ from util.misc import NativeScalerWithGradNormCount as NativeScaler
 
 import models_vit
 
+import logging
+
+
 from engine_finetune import train_one_epoch, evaluate
 
 
+# Set up logging configuration
+logging.basicConfig(
+    filename='my_log_file.log',
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+
+# Add console handler
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.INFO)
+logging.getLogger().addHandler(console_handler)
+
+
 def get_args_parser():
-    print("SN get_args_parser")
+    logging.info("SN get_args_parser")
     parser = argparse.ArgumentParser('MAE fine-tuning for image classification', add_help=False)
     parser.add_argument('--batch_size', default=64, type=int,
                         help='Batch size per GPU (effective batch size is batch_size * accum_iter * # gpus')
@@ -153,7 +169,7 @@ def get_args_parser():
 
 
 def main(args):
-    print("SN main")
+    logging.info("SN main")
     misc.init_distributed_mode(args)
 
     print('job dir: {}'.format(os.path.dirname(os.path.realpath(__file__))))
