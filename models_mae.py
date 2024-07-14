@@ -18,6 +18,7 @@ class MaskedAutoencoderViT(nn.Module):
                  embed_dim=1024, depth=24, num_heads=16,
                  decoder_embed_dim=512, decoder_depth=8, decoder_num_heads=16,
                  mlp_ratio=4., norm_layer=nn.LayerNorm, norm_pix_loss=False):
+        print("SN MaskedAutoencoderViT _init_")
         super().__init__()
 
         # --------------------------------------------------------------------------
@@ -55,6 +56,7 @@ class MaskedAutoencoderViT(nn.Module):
         self.initialize_weights()
 
     def initialize_weights(self):
+        print("SN MaskedAutoencoderViT initialize_weights")
         # initialization
         # initialize (and freeze) pos_embed by sin-cos embedding
         pos_embed = get_2d_sincos_pos_embed(self.pos_embed.shape[-1], int(self.patch_embed.num_patches**.5), cls_token=True)
@@ -75,6 +77,7 @@ class MaskedAutoencoderViT(nn.Module):
         self.apply(self._init_weights)
 
     def _init_weights(self, m):
+        print("SN MaskedAutoencoderViT _init_weights")
         if isinstance(m, nn.Linear):
             # we use xavier_uniform following official JAX ViT:
             torch.nn.init.xavier_uniform_(m.weight)
@@ -85,6 +88,7 @@ class MaskedAutoencoderViT(nn.Module):
             nn.init.constant_(m.weight, 1.0)
 
     def patchify(self, imgs):
+        print("SN MaskedAutoencoderViT patchify")
         """
         imgs: (N, 3, H, W)
         x: (N, L, patch_size**2 *3)
@@ -99,6 +103,7 @@ class MaskedAutoencoderViT(nn.Module):
         return x
 
     def unpatchify(self, x):
+        print("SN MaskedAutoencoderViT unpatchify")
         """
         x: (N, L, patch_size**2 *3)
         imgs: (N, 3, H, W)
@@ -113,6 +118,7 @@ class MaskedAutoencoderViT(nn.Module):
         return imgs
 
     def random_masking(self, x, mask_ratio):
+        print("SN MaskedAutoencoderViT random_masking")
         """
         Perform per-sample random masking by per-sample shuffling.
         Per-sample shuffling is done by argsort random noise.
@@ -140,6 +146,7 @@ class MaskedAutoencoderViT(nn.Module):
         return x_masked, mask, ids_restore
 
     def forward_encoder(self, x, mask_ratio):
+        print("SN MaskedAutoencoderViT forward_encoder")
         # embed patches
         x = self.patch_embed(x)
 
@@ -162,6 +169,7 @@ class MaskedAutoencoderViT(nn.Module):
         return x, mask, ids_restore
 
     def forward_decoder(self, x, ids_restore):
+        print("SN MaskedAutoencoderViT forward_decoder")
         # embed tokens
         x = self.decoder_embed(x)
 
@@ -188,6 +196,7 @@ class MaskedAutoencoderViT(nn.Module):
         return x
 
     def forward_loss(self, imgs, pred, mask):
+        print("SN MaskedAutoencoderViT forward_loss")
         """
         imgs: [N, 3, H, W]
         pred: [N, L, p*p*3]
@@ -206,6 +215,7 @@ class MaskedAutoencoderViT(nn.Module):
         return loss
 
     def forward(self, imgs, mask_ratio=0.75):
+        print("SN MaskedAutoencoderViT forward")
         latent, mask, ids_restore = self.forward_encoder(imgs, mask_ratio)
         pred = self.forward_decoder(latent, ids_restore)  # [N, L, p*p*3]
         loss = self.forward_loss(imgs, pred, mask)
@@ -214,6 +224,7 @@ class MaskedAutoencoderViT(nn.Module):
 
 
 def mae_vit_large_patch16_dec512d8b(**kwargs):
+    print("SN MaskedAutoencoderViT mae_vit_large_patch16_dec512d8b")
     model = MaskedAutoencoderViT(
         patch_size=16, embed_dim=1024, depth=24, num_heads=16,
         decoder_embed_dim=512, decoder_depth=8, decoder_num_heads=16,
