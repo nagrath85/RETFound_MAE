@@ -182,6 +182,7 @@ def evaluate(data_loader, model, device, task, epoch, mode, num_class):
     # gather the stats from all processes
     true_label_decode_list = np.array(true_label_decode_list)
     prediction_decode_list = np.array(prediction_decode_list)
+    print("SN predictions:", prediction_decode_list)
     confusion_matrix = multilabel_confusion_matrix(true_label_decode_list, prediction_decode_list,labels=[i for i in range(num_class)])
     acc, sensitivity, specificity, precision, G, F1, mcc = misc_measures(confusion_matrix)
     
