@@ -36,6 +36,7 @@ from engine_pretrain import train_one_epoch
 
 
 def get_args_parser():
+    print("SN get_args_parser")
     parser = argparse.ArgumentParser('MAE pre-training', add_help=False)
     parser.add_argument('--batch_size', default=64, type=int,
                         help='Batch size per GPU (effective batch size is batch_size * accum_iter * # gpus')
@@ -105,6 +106,7 @@ def get_args_parser():
 
 
 def main(args):
+    print("SN main")
     misc.init_distributed_mode(args)
 
     print('job dir: {}'.format(os.path.dirname(os.path.realpath(__file__))))
